@@ -1,3 +1,4 @@
+import { compararEstrategias } from "./asincronia.js";
 import {
   contarPersonajesPorEspecie,
   clasificarPersonajesPorEpisodios
@@ -31,3 +32,6 @@ console.log(contarPersonajesPorEspecie(personajesPrueba));
 
 console.log("\nClasificación por episodios:");
 console.log(clasificarPersonajesPorEpisodios(personajesPrueba));
+console.log("\nComparación de estrategias:");
+
+await compararEstrategias([1, 2, 3, 4, 5]);
