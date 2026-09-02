@@ -18,7 +18,9 @@ export async function consultarPaginasSecuencialmente(paginas) {
 
   for (const pagina of paginas) {
     const datos = await consultarPagina(pagina);
-    personajes.push(...datos.results);
+    for (const personaje of datos.results) {
+  personajes.push(personaje);
+}
   }
 
   const tiempo = performance.now() - inicio;
@@ -38,9 +40,12 @@ export async function consultarPaginasConcurrentemente(paginas) {
 
   const resultados = await Promise.all(promesas);
 
-  const personajes = resultados.flatMap(
-    (resultado) => resultado.results
-  );
+  const personajes = resultados.reduce(
+  (acumulador, resultado) => {
+    return acumulador.concat(resultado.results);
+  },
+  []
+);
 
   const tiempo = performance.now() - inicio;
 
