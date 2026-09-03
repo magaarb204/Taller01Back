@@ -30,65 +30,45 @@ function obtenerCantidadEpisodios(personaje) {
 // ESTADÍSTICAS POR ESPECIE
 
 export function contarPersonajesPorEspecie(personajes) {
+  return personajes.reduce((acumulador, personaje) => {
+    const especie = obtenerEspecie(personaje);
+    const cantidadEpisodios =
+      obtenerCantidadEpisodios(personaje);
+    const estado = obtenerEstado(personaje);
 
-  // Primero acumulamos:
-  // - cantidad de personajes
-  // - total de episodios
-  // - cantidad de vivos
-
-  const estadisticas = personajes.reduce(
-    (acumulador, personaje) => {
-
-      const especie = obtenerEspecie(personaje);
-      const cantidadEpisodios =
-        obtenerCantidadEpisodios(personaje);
-      const estado = obtenerEstado(personaje);
-
-      // Si la especie todavía no existe,
-      // creamos su estructura inicial
-      if (!acumulador[especie]) {
-        acumulador[especie] = {
-          cantidad: 0,
-          totalEpisodios: 0,
-          vivos: 0
-        };
-      }
-
-      // Incrementar cantidad
-      acumulador[especie].cantidad += 1;
-
-      // Acumular episodios
-      acumulador[especie].totalEpisodios +=
-        cantidadEpisodios;
-
-      // Contar personajes vivos
-      if (estado === "Alive") {
-        acumulador[especie].vivos += 1;
-      }
-
-      return acumulador;
-    },
-    {}
-  );
-
-
-  // Convertimos totalEpisodios en promedioEpisodios
-  return Object.entries(estadisticas).reduce(
-    (resultado, [especie, datos]) => {
-
-      resultado[especie] = {
-        cantidad: datos.cantidad,
-
-        promedioEpisodios:
-          datos.totalEpisodios / datos.cantidad,
-
-        vivos: datos.vivos
+    // Si la especie todavía no existe,
+    // se crea su estructura inicial
+    if (!acumulador[especie]) {
+      acumulador[especie] = {
+        cantidad: 0,
+        promedioEpisodios: 0,
+        vivos: 0
       };
+    }
 
-      return resultado;
-    },
-    {}
-  );
+    // Guardamos la cantidad anterior
+    const cantidadAnterior =
+      acumulador[especie].cantidad;
+
+    // Incrementamos la cantidad de personajes
+    acumulador[especie].cantidad += 1;
+
+    // Calculamos el nuevo promedio
+    acumulador[especie].promedioEpisodios =
+      (
+        acumulador[especie].promedioEpisodios *
+        cantidadAnterior +
+        cantidadEpisodios
+      ) /
+      acumulador[especie].cantidad;
+
+    // Contamos personajes vivos
+    if (estado === "Alive") {
+      acumulador[especie].vivos += 1;
+    }
+
+    return acumulador;
+  }, {});
 }
 
 
