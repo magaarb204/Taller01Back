@@ -7,9 +7,9 @@ export function normalizarPersonajes(personajes) {
       especie: personaje.species,
       tipo: personaje.type,
       genero: personaje.gender,
-      origen: personaje.origin.name,
-      ubicacionActual: personaje.location.name,
-      cantidadEpisodios: personaje.episode.length,
+      origen: personaje.origin?.name ?? "Desconocido",
+      ubicacionActual: personaje.location?.name ?? "Desconocido",
+      cantidadEpisodios: personaje.episode?.length ?? 0,
       imagen: personaje.image
     };
   });
